@@ -48,7 +48,8 @@ export async function newCustomers(req, res) {
             return res.sendStatus(409)
         }
 
-        await db.query(`INSERT INTO customers (name,phone,cpf,birthday) VALUES ($1,$2,$3,$4);`, [name, phone, cpf, birthday])
+        await db.query(`INSERT INTO customers (name,phone,cpf,birthday) 
+        VALUES ($1,$2,$3,$4);`, [name, phone, cpf, birthday])
 
         res.sendStatus(201)
 
