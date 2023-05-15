@@ -1,9 +1,16 @@
 import { db } from "../database/database.connection.js";
+import dayjs from "dayjs";
 
 export async function customers(req, res) {
     try {
         const customers = await db.query(`SELECT * FROM customers;`)
-        res.send(customers.rows)
+
+        const customersFixed = customers.rows.map((customer) => {
+            const newBirthday = dayjs(customer.birthday).format("YYYY-MM-DD")
+            return { ...customer, newBirthday }
+        })
+
+        res.send(customersFixed)
 
     } catch (err) {
         res.status(500).send(err.message)
@@ -15,7 +22,15 @@ export async function customersById(req, res) {
 
     try {
         const customer = await db.query(`SELECT customers.* FROM customers WHERE customers.id = $1;`, [id])
-        res.send(customer.rows[0])
+        if (!customer.rowCount) {
+            return res.sendStatus(404)
+        }
+
+        const newBirthday = dayjs(customer.birthday).format("YYYY-MM-DD")
+
+        const customerFixed = { ...customer.rows[0], newBirthday }
+
+        res.send(customerFixed)
 
     } catch (err) {
         res.status(500).send(err.message)
@@ -51,9 +66,9 @@ export async function updateCustomer(req, res) {
         const customerVerification = await db.query(
             `SELECT * FROM customers WHERE cpf=$1 AND id <> $2`,
             [cpf, id]
-          )
-          if (customerVerification.rowCount !== 0) return res.sendStatus(409)
-    
+        )
+        if (customerVerification.rowCount !== 0) return res.sendStatus(409)
+
         await db.query(`UPDATE customers SET name=$1, phone=$2, cpf=$3, birthday=$4 
         WHERE id = $5;`, [name, phone, cpf, birthday, id])
 
