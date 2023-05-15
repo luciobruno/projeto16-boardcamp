@@ -92,7 +92,7 @@ export async function rentalFinalization(req, res) {
         const daysOfRental = rental.rows[0].daysRented
 
         const diff = dateToday.diff(dateOfRental, 'day')
-        let delayFee = null
+        let delayFee = 0
 
         if (daysOfRental < diff) {
             const number = diff - dateOfRental
