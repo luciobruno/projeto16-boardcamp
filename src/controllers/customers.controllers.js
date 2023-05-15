@@ -7,7 +7,7 @@ export async function customers(req, res) {
 
         const customersFixed = customers.rows.map((customer) => {
             const newBirthday = dayjs(customer.birthday).format("YYYY-MM-DD")
-            return { ...customer, newBirthday }
+            return { ...customer, birthday: newBirthday }
         })
 
         res.send(customersFixed)
@@ -28,7 +28,7 @@ export async function customersById(req, res) {
 
         const newBirthday = dayjs(customer.birthday).format("YYYY-MM-DD")
 
-        const customerFixed = { ...customer.rows[0], newBirthday }
+        const customerFixed = { ...customer.rows[0], birthday: newBirthday }
 
         res.send(customerFixed)
 
