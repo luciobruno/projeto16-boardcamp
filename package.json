@@ -8,7 +8,7 @@
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js"
   },
-  "repository": {
+  "repository": { 
     "type": "git",
     "url": "git+https://github.com/luciobruno/projeto16-boardcamp.git"
   },
